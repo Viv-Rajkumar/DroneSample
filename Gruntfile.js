@@ -5,24 +5,25 @@ module.exports = function(grunt){
    
 
   grunt.initConfig({
+      branchName : "temp",
       shell :{
         test : {
           command:path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
           options: {
-              stdout: true
+            stdout: true
           }
         },
         "test-cov" :{
           command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
-              options: {
-              stdout: true,
-              callback : builder.consolidateCoverageResults
+            options: {
+            stdout: true,
+            callback : builder.consolidateCoverageResults
           }
         },
         ctest :{
           command:"ctest -D Experimental",
           options: {
-              stdout: true
+            stdout: true
           }
         },
         jscs : {
@@ -31,7 +32,13 @@ module.exports = function(grunt){
             stdout: true,
             callback : builder.jscsResult
           }
-        }        
+        },
+        scp : {
+          command:"scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/<%= branchName %>/",
+          options: {
+            stdout: true
+          }
+        }
       },
       clean: {
         test: [builder.rootFolder]
@@ -50,13 +57,14 @@ module.exports = function(grunt){
       }
   });
 
+
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs', "shell:test", 'mkdir:test', 'shell:test-cov']);//Test Coverage results
+  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs', "shell:test", 'mkdir:test', 'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
 };
