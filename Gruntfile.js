@@ -64,7 +64,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:test-cov']);//Test Coverage results ,"shell:test", 'shell:scp'
+  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
 };
