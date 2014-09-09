@@ -34,7 +34,7 @@ module.exports = function(grunt){
           }
         },
         scp : {
-          command:"scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/<%= branchName %>/",
+          command:"scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/temp/",
           options: {
             stdout: true
           }
