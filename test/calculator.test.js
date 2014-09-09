@@ -12,7 +12,7 @@ describe("Calculator Tests", function(){
   });
 
   it("invalid add function with two numbers", function(){
-    assert.equal(10, app.calculator().invalidAdd(5, 5));
+    assert.equal(25, app.calculator().invalidAdd(5, 5));
   });
 
   /*it("invalid add function with single number", function(){
