@@ -5,7 +5,7 @@ module.exports = function(grunt){
    
 
   grunt.initConfig({
-    branchName : "temp",
+    branchName : "root@visualiser.maidsafe.net:/usr/maidsafe/temp/",
     shell :{
       test : {
         command:path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
@@ -34,7 +34,7 @@ module.exports = function(grunt){
         }
       },
       scp : {
-        command:"scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/<%=branchName%>/",
+        command:"scp -r ./coverage/lcov-report <%=branchName%>",
         options: {
           stdout: true
         }
