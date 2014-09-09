@@ -43,7 +43,7 @@ module.exports = function(grunt){
         command : [
           path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
           path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
-          "scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/temp/"
+          "scp -r ./coverage/lcov-report/ root@visualiser.maidsafe.net:/usr/maidsafe/temp/"
         ].join(';'),
         options : {
           callback : builder.consolidateCoverageResults  
