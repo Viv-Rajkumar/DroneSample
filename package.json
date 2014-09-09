@@ -4,7 +4,8 @@
   "description": "sample app for testing mocha test and coverage",
   "main": "server.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "istanbul" : "grunt istanbul"
   },
   "author": "",
   "license": "ISC",
