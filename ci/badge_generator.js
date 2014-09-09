@@ -2,6 +2,9 @@ var fs = require('fs');
 var htmlParser = require('htmlparser2');
 var util = require('util')
 var http = require('http')
+var jscsPassed = false;
+
+exports.rootFolder = rootFolder = 'coverage';//'frontend/test_results'
 
 var getParser = function(coverageResult){
   var watch = false;
@@ -50,7 +53,7 @@ var CoverageBadgeFactory = function(coverageResult){
     });
 
     res.on('end', function(){
-        fs.writeFile('frontend/test_results/coverage_status.svg', imagedata, 'binary', function(err){
+        fs.writeFile( rootFolder + '/coverage_status.svg', imagedata, 'binary', function(err){
             if (err) throw err                
         })
     });
@@ -72,6 +75,8 @@ var getBadgeColor = function(percentage){
 var TestBadgeFactory = function(testResult){
   var factory = this
   factory.text = "Test";
+  testResult.tests += 1;//For adding the JSCS test
+  testResult.passes = jscsPassed? 1 : 0;
   factory.status =  testResult.passes + "/" + testResult.tests;
   factory.color = getBadgeColor((testResult.passes / testResult.tests) * 100);
 
@@ -84,7 +89,7 @@ var TestBadgeFactory = function(testResult){
     });
 
     res.on('end', function(){
-        fs.writeFile('frontend/test_results/test_status.svg', imagedata, 'binary', function(err){
+        fs.writeFile(rootFolder + '/test_status.svg', imagedata, 'binary', function(err){
           if (err) throw err                
         })
     });
@@ -101,6 +106,7 @@ var generateBadges = function(coverageResult, testResult, callback){
 
   http.request(getPayload(coverageBadge.text, coverageBadge.status, coverageBadge.color), coverageBadge.saveBadge).end();
   http.request(getPayload(testBadge.text, testBadge.status, testBadge.color), testBadge.saveBadge).end();
+  console.log("Generating Badges")
   setTimeout(callback, 2000);
 }
 
@@ -109,19 +115,26 @@ exports.consolidateCoverageResults = function(err, stdout, stderr, callback){
   var parser = getParser(coverageResult)
 
   var getTestResults = function(){
-    fs.readFile('frontend/test_results/results.json', {encoding : 'utf-8'}, function (err, data) {
+    fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, function (err, data) {
       if (err) throw err;              
       generateBadges(coverageResult, JSON.parse(data.split('=')[0]).stats, callback)      
     });
   };
 
-  fs.readFile('frontend/test_results/coverage/lcov-report/index.html', {encoding : 'utf-8'}, function (err, data) {
+  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, function (err, data) {
     if (!err){
        parser.write(data);
        parser.end()      
        getTestResults()      
     }else{
+
       callback()
     }       
   });      
+}
+
+exports.jscsResult = function(err, stdout, stderr, callback){
+  jscsPassed = err?false:true;
+  console.log("******** JSCS ******* " + jscsPassed);
+  callback()
 }

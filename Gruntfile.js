@@ -1,7 +1,7 @@
 module.exports = function(grunt){
 
   var path = require('path');
- // var builder = require('./build/badge_generator')
+  var builder = require('./ci/badge_generator')
    
 
   grunt.initConfig({
@@ -13,10 +13,10 @@ module.exports = function(grunt){
           }
         },
         "test-cov" :{
-          command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " --dir " + path.join("frontend", "test_results", "coverage") + " -- -R json-cov > " +path.join("frontend", "test_results", "results.json"),
+          command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
               options: {
-              stdout: true
-   //           callback : builder.consolidateCoverageResults
+              stdout: true,
+              callback : builder.consolidateCoverageResults
           }
         },
         ctest :{
@@ -24,15 +24,22 @@ module.exports = function(grunt){
           options: {
               stdout: true
           }
-        }
+        },
+        jscs : {
+          command:"jscs frontend",
+          options : {
+            stdout: true,
+            callback : builder.jscsResult
+          }
+        }        
       },
       clean: {
-        test: ["frontend/test_results/results.json"]
+        test: [builder.rootFolder]
       },
       mkdir : {
          test : {
           options: {          
-            create: ['frontend/test_results']
+            create: [builder.rootFolder]
           }
          }
       },
@@ -49,7 +56,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('istanbul', ["clean:test",'mkdir:test', 'shell:test-cov']);//Test Coverage results
+  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs', 'mkdir:test', 'shell:test-cov']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
 };
