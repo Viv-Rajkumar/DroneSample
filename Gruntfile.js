@@ -41,7 +41,7 @@ module.exports = function(grunt){
       },
       istanbul :{
         command : [
-          //path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
+          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
           path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
           "scp -r ./coverage/lcov-report root@visualiser.maidsafe.net:/usr/maidsafe/temp/"
         ].join(';'),
@@ -74,7 +74,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:test', 'shell:istanbul']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
+  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
 };
