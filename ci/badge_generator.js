@@ -4,7 +4,7 @@ var util = require('util')
 var http = require('http')
 var jscsPassed = false;
 
-exports.rootFolder = rootFolder = 'coverage';//'frontend/test_results'
+exports.rootFolder = rootFolder = 'coverage/lcov-report';//'frontend/test_results'
 
 var getParser = function(coverageResult){
   var watch = false;
