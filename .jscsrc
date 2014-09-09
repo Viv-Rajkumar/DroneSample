@@ -1,0 +1,18 @@
+{
+	"requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch",
+    "case",
+    "default"
+],
+
+"validateIndentation": 2,
+"disallowTrailingWhitespace": true,
+"requireBlocksOnNewline": true,
+"disallowPaddingNewlinesInBlocks": true
+}

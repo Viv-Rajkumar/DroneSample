@@ -1,17 +1,25 @@
 {
-  "name": "DroneSample",
+  "name": "MochaCalc",
   "version": "0.0.0",
   "description": "sample app for testing mocha test and coverage",
   "main": "server.js",
   "scripts": {
-    "test": "node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R mocha-unfunk-reporter"
+    "test": "grunt test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt": "^0.4.5",
     "mocha": "^1.21.4",
     "istanbul": "^0.3.2",
-    "mocha-unfunk-reporter": "^0.4.0"
+    "mocha-unfunk-reporter": "^0.4.0",
+    "grunt-shell": "^1.1.1",
+    "htmlparser2": "^3.7.3",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-mkdir": "^0.1.2",
+    "grunt-env": "^0.4.1",
+    "jscs": "^1.6.1"
   },
   "dependencies": {
     "express": "^4.8.8"
