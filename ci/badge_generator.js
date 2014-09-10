@@ -6,7 +6,8 @@ var async = require('async')
 var jscsPassed = false;
 
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
-exports.scp = "scp -r ./coverage/lcov-report/ root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results";
+var scp = exports.scp = "scp -r ./coverage/lcov-report/.  root@visualiser.maidsafe.net:/usr/maidsafe/";
+var gitBranch = "git_branch"
 
 var grunt = null;
 
@@ -167,6 +168,13 @@ exports.jscsResult = function(err, stdout, stderr, callback){
   jscsPassed = err?false:true;
   console.log("******** JSCS ******* " + jscsPassed);
   callback()
+}
+
+exports.setGitBranch = function(err, stdout, stderr, callback){
+  if(err) throw err
+  gitBranch = ( stdout=="master" )?"temp":"temp_next";
+  scp = scp + gitBranch + '/test_results'
+  callback();
 }
 
 exports.init = function(gruntModule){

@@ -1,7 +1,7 @@
 module.exports = function(grunt){
 
   var path = require('path');
-  var builder = require('./ci/badge_generator')
+  var ci = require('./ci/badge_generator')
    
 
   grunt.initConfig({
@@ -13,10 +13,10 @@ module.exports = function(grunt){
         }
       },
       "test-cov" :{
-        command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
+        command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(ci.rootFolder, "results.json"),
           options: {
           stdout: true,
-          callback : builder.consolidateCoverageResults
+          callback : ci.consolidateCoverageResults
         }
       },
       ctest :{
@@ -29,11 +29,11 @@ module.exports = function(grunt){
         command:"jscs frontend",
         options : {
           stdout: true,
-          callback : builder.jscsResult
+          callback : ci.jscsResult
         }
       },
       scp : {
-        command: builder.scp,
+        command: ci.scp,
         options: {
           stdout: true
         }
@@ -41,20 +41,26 @@ module.exports = function(grunt){
       istanbul :{
         command : [
           path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
-          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json")          
+          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(ci.rootFolder, "results.json")          
         ].join(';'),
         options : {
-          callback : builder.consolidateCoverageResults  
+          callback : ci.consolidateCoverageResults          
+        }
+      },
+      gitBranch : {
+        command : "git rev-parse --abbrev-ref HEAD",
+        options : {
+          callback : ci.setGitBranch
         }
       }
     },
     clean: {
-      test: [builder.rootFolder]
+      test: [ci.rootFolder]
     },
     mkdir : {
        test : {
         options: {          
-          create: [builder.rootFolder]
+          create: [ci.rootFolder]
         }
        }
     },
@@ -71,10 +77,10 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-env');
 
-  builder.init(grunt)
+  ci.init(grunt)
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('default', ['shell:test-cov'])
-  grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
+  grunt.registerTask('default', ['shell:gitBranch'])
+  grunt.registerTask('istanbul', ["shell:gitBranch", "clean:test", 'shell:jscs', 'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
 };
