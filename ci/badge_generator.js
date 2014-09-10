@@ -6,10 +6,6 @@ var async = require('async')
 var jscsPassed = false;
 
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
-var SCP_COMMAND = "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/%s/test_results";
-var gitBranch = "git_branch"
-
-var BRANCH_END_POINTS = { master : "temp", next : "temp_next"}
 
 var grunt = null;
 
@@ -137,7 +133,7 @@ var generateBadges = function(coverageResult, testResult, callback){
         }
     ], function(err, result){
         console.log("BADGE Generetaion COMPLETED");
-        grunt.tasks(['shell:scp']);
+        grunt.tasks(['shell:scp:'+gitBranch]);
         callback();
     })    
 }
@@ -180,8 +176,4 @@ exports.setGitBranch = function(err, stdout, stderr, callback){
 
 exports.init = function(gruntModule){
   grunt = gruntModule;
-}
-
-exports.getSCPCommand = function(){
-  return util.format(scp, BRANCH_END_POINTS[gitBranch]);
 }
