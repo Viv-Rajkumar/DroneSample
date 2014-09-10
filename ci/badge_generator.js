@@ -122,13 +122,14 @@ exports.consolidateCoverageResults = function(err, stdout, stderr, callback){
     });
   };
 
-  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, function (err, data) {
+  fs.readFile(rootFolder + '/index.html', {encoding : 'utf-8'}, function (err, data) {
     if (!err){
        parser.write(data);
        parser.end()      
        getTestResults()      
     }else{
-
+      console.log("Badge generation failed")
+      console.log(err)
       callback()
     }       
   });      
