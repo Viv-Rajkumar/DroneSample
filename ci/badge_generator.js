@@ -5,6 +5,7 @@ var http = require('http')
 var jscsPassed = false;
 
 exports.rootFolder = rootFolder = 'coverage/lcov-report';//'frontend/test_results'
+exports.scp = "scp -r ./coverage/lcov-report/ root@visualiser.maidsafe.net:/usr/maidsafe/temp/";
 
 var getParser = function(coverageResult){
   var watch = false;
