@@ -6,7 +6,7 @@ var async = require('async')
 var jscsPassed = false;
 
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
-var scp = "scp -r ./coverage/lcov-report/  root@visualiser.maidsafe.net:/usr/maidsafe/%s/frontend/test_results";
+var scp = "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/%s/frontend/test_results";
 var gitBranch = "git_branch"
 
 var grunt = null;
@@ -172,9 +172,10 @@ exports.jscsResult = function(err, stdout, stderr, callback){
 
 exports.setGitBranch = function(err, stdout, stderr, callback){
   if(err) throw err
-  gitBranch = ( stdout=="master" )?"temp":"temp_next";
-  console.log("SCP COMMAND :: " + util.format(scp, gitBranch))
+  console.log(stdout);  
+  gitBranch = ( stdout.trim()=="master" )?"temp":"temp_next";  
   grunt.config.data.shell.scp.command = util.format(scp, gitBranch);// + '/test_results');
+  console.log("SCP COMMAND :: " + grunt.config.data.shell.scp.command);
   callback();
 }
 

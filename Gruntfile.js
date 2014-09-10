@@ -33,7 +33,7 @@ module.exports = function(grunt){
         }
       },
       scp : {
-        command: ci.scp,
+        command: "",
         options: {
           stdout: true
         }
