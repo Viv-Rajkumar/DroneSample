@@ -43,6 +43,12 @@ var CoverageBadgeFactory = function(coverageResult){
     total += coverageResult[key];
   };
 
+  var callback;
+
+  this.onComplete = function(cb){
+    callback = cb;
+  }
+
   factory.status = (total/4).toFixed(2)
   factory.color = getBadgeColor(factory.status)
 
@@ -57,7 +63,8 @@ var CoverageBadgeFactory = function(coverageResult){
     res.on('end', function(){
         fs.writeFile( rootFolder + '/coverage_status.svg', imagedata, 'binary', function(err){
             if (err) throw err        
-            console.log("Generated " + rootFolder + '/coverage_status.svg');        
+            console.log("Generated " + rootFolder + '/coverage_status.svg');   
+            callback()     
         })
     });
   }
@@ -82,6 +89,11 @@ var TestBadgeFactory = function(testResult){
   testResult.passes = jscsPassed? 1 : 0;
   factory.status =  testResult.passes + "/" + testResult.tests;
   factory.color = getBadgeColor((testResult.passes / testResult.tests) * 100);
+  var callback;
+
+  this.onComplete = function(cb){
+    callback = cb;
+  }
 
   this.saveBadge = function(res){
     var imagedata = '';
@@ -94,7 +106,8 @@ var TestBadgeFactory = function(testResult){
     res.on('end', function(){
         fs.writeFile(rootFolder + '/test_status.svg', imagedata, 'binary', function(err){
           if (err) throw err  
-          console.log("Generated " + rootFolder + '/test_status.svg');              
+          console.log("Generated " + rootFolder + '/test_status.svg');  
+          callback()            
         })
     });
   }
@@ -108,13 +121,18 @@ var generateBadges = function(coverageResult, testResult, callback){
       return { host: 'img.shields.io', path : util.format("/badge/%s-%s-%s.svg", text, status, color)}
   }
   async.parallel([
-        function(){
+        function(cb){
+          coverageBadge.onComplete(cb)
           http.request(getPayload(coverageBadge.text, coverageBadge.status, coverageBadge.color), coverageBadge.saveBadge).end();          
         },
-        function(){
+        function(cb){
+          testBadge.onComplete(cb)
           http.request(getPayload(testBadge.text, testBadge.status, testBadge.color), testBadge.saveBadge).end();  
         }
-    ], callback)    
+    ], function(err, result){
+        console.log("BADGE Generetaion COMPLETED");
+        callback();
+    })    
 }
 
 exports.consolidateCoverageResults = function(err, stdout, stderr, callback){       
