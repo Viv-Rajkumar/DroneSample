@@ -2,9 +2,10 @@ var fs = require('fs');
 var htmlParser = require('htmlparser2');
 var util = require('util')
 var http = require('http')
+var async = require('async')
 var jscsPassed = false;
 
-exports.rootFolder = rootFolder = 'coverage/lcov-report';//'frontend/test_results'
+var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
 exports.scp = "scp -r ./coverage/lcov-report/ root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results";
 
 var getParser = function(coverageResult){
@@ -106,11 +107,14 @@ var generateBadges = function(coverageResult, testResult, callback){
   var getPayload = function(text, status, color){    
       return { host: 'img.shields.io', path : util.format("/badge/%s-%s-%s.svg", text, status, color)}
   }
-
-  http.request(getPayload(coverageBadge.text, coverageBadge.status, coverageBadge.color), coverageBadge.saveBadge).end();
-  http.request(getPayload(testBadge.text, testBadge.status, testBadge.color), testBadge.saveBadge).end();
-  console.log("Generating Badges")
-  setTimeout(callback, 2000);
+  async.parallel([
+        function(){
+          http.request(getPayload(coverageBadge.text, coverageBadge.status, coverageBadge.color), coverageBadge.saveBadge).end();          
+        },
+        function(){
+          http.request(getPayload(testBadge.text, testBadge.status, testBadge.color), testBadge.saveBadge).end();  
+        }
+    ], callback)    
 }
 
 exports.consolidateCoverageResults = function(err, stdout, stderr, callback){       
@@ -126,9 +130,9 @@ exports.consolidateCoverageResults = function(err, stdout, stderr, callback){
 
   fs.readFile(rootFolder + '/index.html', {encoding : 'utf-8'}, function (err, data) {
     if (!err){
-       parser.write(data);
-       parser.end()      
-       getTestResults()      
+      parser.write(data);
+      parser.end()      
+      getTestResults()      
     }else{
       console.log("Badge generation failed")
       console.log(err)
