@@ -33,7 +33,9 @@ module.exports = function(grunt){
         }
       },
       scp : {
-        command: "",
+        command: function(){
+          return ci.getSCPCommand()
+        },
         options: {
           stdout: true
         }
