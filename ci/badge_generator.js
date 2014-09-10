@@ -173,7 +173,7 @@ exports.jscsResult = function(err, stdout, stderr, callback){
 exports.setGitBranch = function(err, stdout, stderr, callback){
   if(err) throw err
   gitBranch = ( stdout=="master" )?"temp":"temp_next";
-  console.log("SCP COMMAND :: "util.format(scp, gitBranch))
+  console.log("SCP COMMAND :: " + util.format(scp, gitBranch))
   grunt.config.data.shell.scp.command = util.format(scp, gitBranch);// + '/test_results');
   callback();
 }
