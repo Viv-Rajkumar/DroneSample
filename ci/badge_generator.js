@@ -55,7 +55,8 @@ var CoverageBadgeFactory = function(coverageResult){
 
     res.on('end', function(){
         fs.writeFile( rootFolder + '/coverage_status.svg', imagedata, 'binary', function(err){
-            if (err) throw err                
+            if (err) throw err        
+            console.log("Generated " + rootFolder + '/coverage_status.svg');        
         })
     });
   }
@@ -91,7 +92,8 @@ var TestBadgeFactory = function(testResult){
 
     res.on('end', function(){
         fs.writeFile(rootFolder + '/test_status.svg', imagedata, 'binary', function(err){
-          if (err) throw err                
+          if (err) throw err  
+          console.log("Generated " + rootFolder + '/test_status.svg');              
         })
     });
   }
