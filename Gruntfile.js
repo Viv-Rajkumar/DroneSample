@@ -5,7 +5,7 @@ module.exports = function(grunt){
    
 
   grunt.initConfig({
-    branchName : "root@visualiser.maidsafe.net:/usr/maidsafe/temp/",
+    branchName : "root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
     shell :{
       test : {
         command:path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
