@@ -6,7 +6,7 @@ var async = require('async')
 var jscsPassed = false;
 
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
-var scp = exports.scp = "scp -r ./coverage/lcov-report/.  root@visualiser.maidsafe.net:/usr/maidsafe/";
+var scp = exports.scp = "scp -r ./coverage/lcov-report/  root@visualiser.maidsafe.net:/usr/maidsafe/";
 var gitBranch = "git_branch"
 
 var grunt = null;
