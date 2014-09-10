@@ -33,7 +33,7 @@ module.exports = function(grunt){
         }
       },
       scp : {
-        command:"scp -r ./coverage/lcov-report <%=branchName%>",
+        command: builder.scp,
         options: {
           stdout: true
         }
@@ -41,8 +41,7 @@ module.exports = function(grunt){
       istanbul :{
         command : [
           path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
-          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json"),
-          builder.scp
+          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(builder.rootFolder, "results.json")          
         ].join(';'),
         options : {
           callback : builder.consolidateCoverageResults  
@@ -72,8 +71,9 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-env');
 
+  builder.init(grunt)
   grunt.registerTask('test', ['shell:test']);//Test
-  //grunt.registerTask('default', ['shell:test-cov'])
+  grunt.registerTask('default', ['shell:test-cov'])
   grunt.registerTask('istanbul', ["clean:test", 'shell:jscs',  'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 

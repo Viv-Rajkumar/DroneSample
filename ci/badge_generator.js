@@ -8,6 +8,9 @@ var jscsPassed = false;
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
 exports.scp = "scp -r ./coverage/lcov-report/ root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results";
 
+var grunt = null;
+
+
 var getParser = function(coverageResult){
   var watch = false;
   var keys = ["statement","branches", "functions", "lines"];  
@@ -131,6 +134,7 @@ var generateBadges = function(coverageResult, testResult, callback){
         }
     ], function(err, result){
         console.log("BADGE Generetaion COMPLETED");
+        grunt.tasks(['shell:scp']);
         callback();
     })    
 }
@@ -163,4 +167,8 @@ exports.jscsResult = function(err, stdout, stderr, callback){
   jscsPassed = err?false:true;
   console.log("******** JSCS ******* " + jscsPassed);
   callback()
+}
+
+exports.init = function(gruntModule){
+  grunt = gruntModule;
 }
