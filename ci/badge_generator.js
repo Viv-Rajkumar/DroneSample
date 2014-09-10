@@ -133,7 +133,7 @@ var generateBadges = function(coverageResult, testResult, callback){
         }
     ], function(err, result){
         console.log("BADGE Generetaion COMPLETED");
-        grunt.tasks(['shell:scp:'+gitBranch]);
+        grunt.tasks(['shell:scp-'+gitBranch]);
         callback();
     })    
 }

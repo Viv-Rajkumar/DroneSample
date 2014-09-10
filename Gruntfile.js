@@ -32,19 +32,17 @@ module.exports = function(grunt){
           callback : ci.jscsResult
         }
       },
-      scp : {
-        master : {
-          command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
-          options: {
-            stdout: true
-          }  
-        },
-        next : {
-          command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp_next/test_results",
-          options: {
-            stdout: true
-          }
-        }
+      "scp-master" : {      
+        command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
+        options: {
+          stdout: true
+        }  
+      },
+      "scp-next" : {      
+        command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp_next/test_results",
+        options: {
+          stdout: true
+        }  
       },
       istanbul :{
         command : [
@@ -87,7 +85,7 @@ module.exports = function(grunt){
 
   ci.init(grunt)
   grunt.registerTask('test', ['shell:test']);//Test
-  grunt.registerTask('default', ['shell:scp:d'])
+ // grunt.registerTask('default', ['shell:scp-master'])
   grunt.registerTask('istanbul', ["shell:gitBranch", "clean:test", 'shell:jscs', 'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
   grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
 
