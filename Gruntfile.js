@@ -33,7 +33,7 @@ module.exports = function(grunt){
         }
       },
       "scp-master" : {      
-        command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
+        command: "scp -r ./coverage/lcov-report/*  root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
         options: {
           stdout: true
         }  
