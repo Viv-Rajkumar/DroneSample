@@ -1,56 +1,28 @@
 module.exports = function(grunt){
 
-  var path = require('path');
-  var ci = require('./ci/badge_generator')
-   
+  var ci = require('./ci/badge_generator')    
+  var ISTANBUL_COMMAND = "istanbul cover node_modules/mocha/bin/_mocha -- ";   
 
   grunt.initConfig({
-    shell :{
+    shell : {
       test : {
-        command:path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
-        options: {
-          stdout: true
-        }
-      },
-      "test-cov" :{
-        command: path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(ci.rootFolder, "results.json"),
-          options: {
-          stdout: true,
-          callback : ci.consolidateCoverageResults
-        }
-      },
-      ctest :{
-        command:"ctest -D Experimental",
-        options: {
-          stdout: true
-        }
+        command: ISTANBUL_COMMAND + "-R mocha-unfunk-reporter"
       },
       jscs : {
-        command:"jscs frontend",
-        options : {
-          stdout: true,
+        command:"jscs . -r text > coverage/jscs.txt",
+        options : {         
           callback : ci.jscsResult
         }
       },
-      "scp-master" : {      
-        command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp/test_results",
-        options: {
-          stdout: true
-        }  
+      scp : {      
+        command: function(path){          
+          return "scp -r ./coverage/lcov-report/*  root@visualiser.maidsafe.net:/usr/maidsafe/" + path + "/frontend/test_results"
+        }        
       },
-      "scp-next" : {      
-        command: "scp -r ./coverage/lcov-report  root@visualiser.maidsafe.net:/usr/maidsafe/temp_next/test_results",
-        options: {
-          stdout: true
-        }  
-      },
-      istanbul :{
-        command : [
-          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") +" -- -R mocha-unfunk-reporter",
-          path.join("node_modules",".bin","istanbul") +" cover " + path.join("node_modules", "mocha", "bin", "_mocha") + " -- -R json-cov > " +path.join(ci.rootFolder, "results.json")          
-        ].join(';'),
+      ci : {
+        command : ISTANBUL_COMMAND + "-R json-cov > " + ci.rootFolder + "/results.json",
         options : {
-          callback : ci.consolidateCoverageResults          
+          callback : ci.consolidateCoverageResults 
         }
       },
       gitBranch : {
@@ -68,12 +40,7 @@ module.exports = function(grunt){
         options: {          
           create: [ci.rootFolder]
         }
-       }
-    },
-    env : {
-        mochaPlain : {
-          'mocha-unfunk-style' : "plain"
-        }
+      }
     }
   });
 
@@ -81,12 +48,9 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mkdir');
-  grunt.loadNpmTasks('grunt-env');
+  
+  ci.init(grunt);
 
-  ci.init(grunt)
-  grunt.registerTask('test', ['shell:test']);//Test
- // grunt.registerTask('default', ['shell:scp-master'])
-  grunt.registerTask('istanbul', ["shell:gitBranch", "clean:test", 'shell:jscs', 'mkdir:test', 'shell:istanbul', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results
-  grunt.registerTask('ctest', ['env:mochaPlain', 'shell:ctest']);//Pushes Test results to CDASH  
-
+  grunt.registerTask('test', ["clean:test", 'mkdir:test', 'shell:jscs', 'shell:test']);//Test 
+  grunt.registerTask('ci', ["shell:gitBranch", "clean:test", 'mkdir:test', 'shell:jscs', 'shell:ci', 'shell:test']);//'shell:test-cov', 'shell:scp']);//Test Coverage results 
 };

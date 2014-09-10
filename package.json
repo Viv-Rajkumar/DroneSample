@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "grunt test",
-    "istanbul": "grunt istanbul"
+    "ci": "grunt ci"
   },
   "author": "",
   "license": "ISC",

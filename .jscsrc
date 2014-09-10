@@ -1,19 +1,7 @@
 {
-  "preset": "google",  
-	"requireCurlyBraces": [
-    "if",
-    "else",
-    "for",
-    "while",
-    "do",
-    "try",
-    "catch",
-    "case",
-    "default"
-],
-
-"validateIndentation": 2,
-"disallowTrailingWhitespace": true,
-"requireBlocksOnNewline": true,
-"disallowPaddingNewlinesInBlocks": true
+  "excludeFiles" : ["coverage", "node_modules", "bower_components"],
+  "preset": "google",
+  "validateIndentation": 2,
+  "disallowTrailingWhitespace": true,
+  "requireBlocksOnNewline": true
 }

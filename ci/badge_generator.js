@@ -8,6 +8,7 @@ var jscsPassed = false;
 var rootFolder = exports.rootFolder =  'coverage/lcov-report';//'frontend/test_results'
 
 var grunt = null;
+var BRANCH_PATH_MAPPING = {master : "temp", next : "temp_next"};
 
 
 var getParser = function(coverageResult){
@@ -67,7 +68,7 @@ var CoverageBadgeFactory = function(coverageResult){
             if (err) throw err        
             console.log("Generated " + rootFolder + '/coverage_status.svg');   
             callback()     
-        })
+        });
     });
   }
 }
@@ -88,7 +89,7 @@ var TestBadgeFactory = function(testResult){
   var factory = this
   factory.text = "Test";
   testResult.tests += 1;//For adding the JSCS test
-  testResult.passes = jscsPassed? 1 : 0;
+  testResult.passes += jscsPassed? 1 : 0;
   factory.status =  testResult.passes + "/" + testResult.tests;
   factory.color = getBadgeColor((testResult.passes / testResult.tests) * 100);
   var callback;
@@ -133,7 +134,7 @@ var generateBadges = function(coverageResult, testResult, callback){
         }
     ], function(err, result){
         console.log("BADGE Generetaion COMPLETED");
-        grunt.tasks(['shell:scp-'+gitBranch]);
+        grunt.tasks(['shell:scp:'+ BRANCH_PATH_MAPPING[gitBranch]]);
         callback();
     })    
 }
