@@ -1,7 +1,6 @@
 {
   "excludeFiles" : ["coverage", "node_modules", "bower_components"],
   "preset": "google",
-  "validateIndentation": 2,
-  "disallowTrailingWhitespace": true,
-  "requireBlocksOnNewline": true
+  "validateIndentation": null,
+  "maximumLineLength":120
 }
