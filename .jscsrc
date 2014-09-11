@@ -2,5 +2,5 @@
   "excludeFiles" : ["coverage", "node_modules", "bower_components"],
   "preset": "google",
   "validateIndentation": null,
-  "maximumLineLength":120
+  "maximumLineLength":150
 }
