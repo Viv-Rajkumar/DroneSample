@@ -7,7 +7,7 @@ var jscsPassed;
 //scp and badge generation disabled 
 var defaultConfig = {
   publishedFolder : 'coverage',
-  scpBranchPath : {master_ : 'temp', next_ : 'temp_next'},
+  scpBranchPath : {master_m : 'temp', next_m : 'temp_next'},
   jsonReportFileName : 'results.json',
   jscsReportFileName : 'jscs.txt'
 };
