@@ -4,9 +4,10 @@ var async = require('async');
 
 var gitBranchName;
 var jscsPassed;
+//scp and badge generation disabled 
 var defaultConfig = {
   publishedFolder : 'coverage',
-  scpBranchPath : {master : 'temp', next : 'temp_next'},
+  scpBranchPath : {master_ : 'temp', next_ : 'temp_next'},
   jsonReportFileName : 'results.json',
   jscsReportFileName : 'jscs.txt'
 };
