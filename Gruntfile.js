@@ -14,7 +14,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell : {
       test : {
-        command: ISTANBUL_COMMAND + '-R mocha-unfunk-reporter'
+        command: ISTANBUL_COMMAND + ' -u tdd -R mocha-unfunk-reporter'
       },
       jscs : {
         command:'jscs . -r text > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jscsReportFileName,
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         }
       },
       ci : {
-        command : ISTANBUL_COMMAND + '-R json-cov > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
+        command : ISTANBUL_COMMAND + ' -u tdd -R json-cov > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
         options : {
           callback : ci.coverageCompleted
         }
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       test: [CI_CONFIG.publishedFolder]
     },
     mkdir : {
-       test : {
+      test : {
         options: {
           create: [CI_CONFIG.publishedFolder]
         }

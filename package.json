@@ -20,7 +20,8 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-mkdir": "^0.1.2",
     "grunt-env": "^0.4.1",
-    "jscs": "^1.6.1"
+    "jscs": "^1.6.1",
+    "grunt-contrib-jshint": "^0.10.0"
   },
   "dependencies": {
     "express": "^4.8.8",
